@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { body, param } from 'express-validator';
 import { ProjectController } from '../controllers/ProjectController';
 import { handleInputErrors } from '../middleware/validation';
+import { TaskController } from '../controllers/TaskController';
+import { validateProjectExists } from '../middleware/project';
 
 const router = Router();
 
@@ -34,6 +36,15 @@ router.delete('/:id',
     param('id').isMongoId().withMessage('Invalid ID'),
     handleInputErrors,
     ProjectController.deleteProject
+);
+
+/** Routes for task */
+router.post('/:projectId/task',
+    validateProjectExists,
+    body('name').notEmpty().withMessage('Task name is required'),
+    body('description').notEmpty().withMessage('The description task is required'),
+    handleInputErrors,
+    TaskController.createTask
 );
 
 export default router;
