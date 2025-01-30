@@ -91,4 +91,24 @@ export class TaskController {
             res.status(500).json({ error: 'An error ocurred' });
         }
     }
+
+    static updateStatus = async (req: Request, res: Response) => {
+        try {
+            const { taskId } = req.params;
+            const task = await Task.findById(taskId);
+            if(!task) {
+                const error = new Error('Task not found')
+                res.status(404).json({ error: error.message });
+                return
+            }
+
+            const { status } = req.body;
+            task.status = status;
+            await task.save();
+
+            res.send('Status task updated successfully');
+        } catch (error) {
+            res.status(500).json({ error: 'An error ocurred' });
+        }
+    }
 }
