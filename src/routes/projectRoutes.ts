@@ -3,7 +3,8 @@ import { body, param } from 'express-validator';
 import { ProjectController } from '../controllers/ProjectController';
 import { handleInputErrors } from '../middleware/validation';
 import { TaskController } from '../controllers/TaskController';
-import { validateProjectExists } from '../middleware/project';
+import { projectExists } from '../middleware/project';
+import { taskBelongsToProject, taskExists } from '../middleware/task';
 
 const router = Router();
 
@@ -39,7 +40,7 @@ router.delete('/:id',
 );
 
 /** Routes for task */
-router.param('projectId', validateProjectExists);
+router.param('projectId', projectExists);
 
 router.post('/:projectId/task',
     body('name').notEmpty().withMessage('Task name is required'),
@@ -47,6 +48,9 @@ router.post('/:projectId/task',
     handleInputErrors,
     TaskController.createTask
 );
+
+router.param('taskId', taskExists);
+router.param('taskId', taskBelongsToProject);
 
 router.get('/:projectId/task',
     TaskController.getProjectTasks
