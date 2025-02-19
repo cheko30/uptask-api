@@ -42,7 +42,7 @@ router.delete('/:id',
 /** Routes for task */
 router.param('projectId', projectExists);
 
-router.post('/:projectId/task',
+router.post('/:projectId/tasks',
     body('name').notEmpty().withMessage('Task name is required'),
     body('description').notEmpty().withMessage('The description task is required'),
     handleInputErrors,
