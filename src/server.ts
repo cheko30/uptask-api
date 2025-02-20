@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { connectDB } from './config/db';
+import authRoutes from './routes/authRoutes';
 import projectsRoutes from './routes/projectRoutes';
 import { corsConfig } from './config/cors';
 import morgan from 'morgan';
@@ -16,7 +17,7 @@ connectDB();
 const app = express();
 
 //CORS
-app.use(cors(corsConfig))
+//app.use(cors(corsConfig))
 
 // Logging
 app.use(morgan('dev'))
@@ -25,6 +26,7 @@ app.use(morgan('dev'))
 app.use(express.json());
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectsRoutes);
 
 export default app;
