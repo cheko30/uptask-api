@@ -7,10 +7,10 @@ import { projectExists } from '../middleware/project';
 import { taskBelongsToProject, taskExists } from '../middleware/task';
 import { authenticate } from '../middleware/auth';
 
-const router = Router();
+const router = Router()
+router.use(authenticate)
 
 router.post('/',
-    authenticate,
     body('projectName').notEmpty().withMessage('Project name is required'),
     body('clientName').notEmpty().withMessage('Client name is required'),
     body('description').notEmpty().withMessage('Description is required'),
