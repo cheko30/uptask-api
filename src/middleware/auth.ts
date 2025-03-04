@@ -24,8 +24,8 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         if(typeof decoded === 'object' && decoded.id) {
             const user = await User.findById(decoded.id).select('_id name email')
             if(user) {
-                console.log(user)
                 req.user = user
+                next()
             } else {
                 res.status(500).json({error: 'Token is invalid'})
             }
@@ -34,6 +34,4 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         console.log(error)
         res.status(500).json({error: 'Token is invalid'})
     }
-
-    next()
 }
