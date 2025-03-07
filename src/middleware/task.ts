@@ -39,3 +39,17 @@ export async function taskBelongsToProject(req: Request, res: Response, next: Ne
         res.status(500).json({ error: 'An error ocurred' });
     }
 }
+
+export async function hasAuthorization(req: Request, res: Response, next: NextFunction) {
+    try {
+        if(req.user.id.toString() !== req.project.manager.toString() ) {
+            const error = new Error('Action invalid');
+            res.status(400).json({ error: error.message });
+            return
+        }
+
+        next();
+    } catch (error) {
+        res.status(500).json({ error: 'An error ocurred' });
+    }
+}
