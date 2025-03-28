@@ -28,23 +28,25 @@ router.get('/:id',
     ProjectController.getProjectById
 );
 
-router.put('/:id',
-    param('id').isMongoId().withMessage('Invalid ID'),
+/** Routes for task */
+router.param('projectId', projectExists);
+
+router.put('/:projectId',
+    param('projectId').isMongoId().withMessage('Invalid ID'),
     body('projectName').notEmpty().withMessage('Project name is required'),
     body('clientName').notEmpty().withMessage('Client name is required'),
     body('description').notEmpty().withMessage('Description is required'),
     handleInputErrors,
+    hasAuthorization,
     ProjectController.updateProject
 );
 
 router.delete('/:id',
-    param('id').isMongoId().withMessage('Invalid ID'),
+    param('projectId').isMongoId().withMessage('Invalid ID'),
     handleInputErrors,
+    hasAuthorization,
     ProjectController.deleteProject
 );
-
-/** Routes for task */
-router.param('projectId', projectExists);
 
 router.post('/:projectId/tasks',
     body('name').notEmpty().withMessage('Task name is required'),
